@@ -37,7 +37,7 @@ pipeline {
             steps {
                 dir('C:\\Users\\vinod_jakhar\\Documents\\codebases\\live\\TestCICDCode') {
                     bat """
-                    python deploy_marker.py
+                    "C:\\Users\\vinod_jakhar\\AppData\\Local\\Python\\bin\\python.exe" deploy_marker.py
                     """
                 }
             }
