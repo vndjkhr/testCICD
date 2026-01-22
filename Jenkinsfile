@@ -2,13 +2,12 @@ pipeline {
     agent any
 
     environment {
-        SRC_DIR = "Documents\\local\\TestCICDCode"
-        DEPLOY_DIR = "Documents\\Live\\TestCICDCode"
+        DEPLOY_DIR = "C:\\Users\\vinod_jakhar\\Documents\\codebases\\live\\TestCICDCode"
     }
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 git branch: 'master',
                     url: 'https://github.com/vndjkhr/TestCICD.git',
@@ -16,28 +15,30 @@ pipeline {
             }
         }
 
-        stage('Prepare Deploy Folder') {
+        stage('Prepare Deployment Folder') {
             steps {
-                bat '''
-                if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%"
-                '''
+                bat """
+                if not exist "%DEPLOY_DIR%" (
+                    mkdir "%DEPLOY_DIR%"
+                )
+                """
             }
         }
 
-        stage('Deploy Code') {
+        stage('Deploy Code to Live Folder') {
             steps {
-                bat '''
-                xcopy /E /Y * "%DEPLOY_DIR%"
-                '''
+                bat """
+                xcopy /E /Y /I * "%DEPLOY_DIR%"
+                """
             }
         }
 
-        stage('Run Deployment Script') {
+        stage('Run Deployment Marker') {
             steps {
-                dir('Documents\\Live\\TestCICDCode') {
-                    bat '''
+                dir('C:\\Users\\vinod_jakhar\\Documents\\codebases\\live\\TestCICDCode') {
+                    bat """
                     python deploy_marker.py
-                    '''
+                    """
                 }
             }
         }
@@ -45,10 +46,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Deployment successful"
+            echo "✅ CI/CD Demo Deployment Successful"
         }
         failure {
-            echo "❌ Deployment failed"
+            echo "❌ CI/CD Demo Deployment Failed"
         }
     }
 }
